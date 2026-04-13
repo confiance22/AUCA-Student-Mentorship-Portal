@@ -1,0 +1,100 @@
+@startuml AUCA_Mentorship_ClassDiagram
+
+skinparam backgroundColor white
+skinparam ArrowColor #185FA5
+skinparam classBackgroundColor #E6F1FB
+skinparam classBorderColor #185FA5
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 11
+skinparam CircledCharacterRadius 10
+
+title CLASS DIAGRAM FOR AUCA STUDENT MENTORSHIP PORTAL
+
+class User {
+    userID: int
+    fullName: String
+    email: String
+    password: String
+    role: String
+    department: String
+    createdAt: DateTime
+    --
+    Persistent
+}
+
+class MentorProfile {
+    mentorID: int
+    userID: int
+    expertise: String
+    guidanceType: String
+    mentorType: String
+    availability: String
+    isApproved: boolean
+    bio: String
+    --
+    Persistent
+}
+
+class MenteeProfile {
+    menteeID: int
+    userID: int
+    yearOfStudy: int
+    academicGoals: String
+    careerGoals: String
+    --
+    Persistent
+}
+
+class Session {
+    sessionID: int
+    menteeID: int
+    mentorID: int
+    sessionDate: Date
+    sessionTime: Time
+    topic: String
+    guidanceType: String
+    status: String
+    notes: String
+    --
+    Persistent
+}
+
+class Feedback {
+    feedbackID: int
+    sessionID: int
+    menteeID: int
+    mentorID: int
+    rating: int
+    review: String
+    createdAt: DateTime
+    --
+    Persistent
+}
+
+class Notification {
+    notificationID: int
+    userID: int
+    message: String
+    isRead: boolean
+    timestamp: DateTime
+    --
+    Persistent
+}
+
+class AdminUser {
+    adminID: int
+    userID: int
+    role: String
+    --
+    Persistent
+}
+
+User "1" --> "0..1" MentorProfile : registers as
+User "1" --> "0..1" MenteeProfile : registers as
+User "1" --> "0..1" AdminUser : manages as
+MenteeProfile "1" --> "0..*" Session : books
+MentorProfile "1" --> "0..*" Session : handles
+Session "1" --> "0..1" Feedback : receives
+User "1" --> "0..*" Notification : receives
+
+@enduml

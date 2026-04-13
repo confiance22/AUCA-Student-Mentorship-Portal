@@ -1,0 +1,83 @@
+@startuml AUCA_Mentorship_UseCase
+
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam ArrowColor #185FA5
+skinparam ActorBorderColor #185FA5
+skinparam UsecaseBorderColor #185FA5
+skinparam UsecaseBackgroundColor #E6F1FB
+
+title AUCA Student Mentorship Portal - Use Case Diagram
+
+actor "Mentee User" as Mentee
+actor "Mentor User" as Mentor
+actor "Admin User" as Admin
+
+rectangle "AUCA Student Mentorship Portal" {
+
+    package "Authentication" {
+        usecase "Register Account" as UC1
+        usecase "Login" as UC2
+        usecase "Manage Profile" as UC3
+    }
+
+    package "Mentor Discovery" {
+        usecase "Browse Mentor Directory" as UC4
+        usecase "Search Mentor by Department" as UC5
+        usecase "View Mentor Profile" as UC6
+    }
+
+    package "Session Management" {
+        usecase "Book a Session" as UC7
+        usecase "Accept / Decline Session" as UC8
+        usecase "Cancel Session" as UC9
+        usecase "View Session History" as UC10
+    }
+
+    package "Feedback & Ratings" {
+        usecase "Rate Mentor" as UC11
+        usecase "Write Session Review" as UC12
+        usecase "View My Ratings" as UC13
+    }
+
+    package "Admin Management" {
+        usecase "Approve Mentor Application" as UC14
+        usecase "Manage Users" as UC15
+        usecase "Generate Reports" as UC16
+        usecase "View All Sessions" as UC17
+    }
+}
+
+Mentee --> UC1
+Mentee --> UC2
+Mentee --> UC3
+Mentee --> UC4
+Mentee --> UC5
+Mentee --> UC6
+Mentee --> UC7
+Mentee --> UC9
+Mentee --> UC10
+Mentee --> UC11
+Mentee --> UC12
+
+Mentor --> UC1
+Mentor --> UC2
+Mentor --> UC3
+Mentor --> UC8
+Mentor --> UC9
+Mentor --> UC10
+Mentor --> UC13
+
+Admin --> UC2
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+
+UC5 .> UC4 : <<extends>>
+UC6 .> UC4 : <<extends>>
+UC7 .> UC6 : <<includes>>
+UC12 .> UC11 : <<includes>>
+
+@enduml

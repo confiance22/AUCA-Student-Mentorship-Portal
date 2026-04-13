@@ -1,0 +1,91 @@
+@startuml AUCA_Mentorship_FunctionalDiagram
+
+skinparam backgroundColor white
+skinparam ArrowColor #185FA5
+skinparam rectangleBackgroundColor #E6F1FB
+skinparam rectangleBorderColor #185FA5
+skinparam packageBackgroundColor #FAEEDA
+skinparam packageBorderColor #633806
+skinparam actorBorderColor #185FA5
+skinparam actorBackgroundColor #E6F1FB
+skinparam noteBackgroundColor #E1F5EE
+skinparam noteBorderColor #085041
+
+title FUNCTIONAL DIAGRAM FOR AUCA STUDENT MENTORSHIP PORTAL
+
+actor "AUCA\nVice Chancellor" as VC
+actor "Academic\nRegistrar" as Registrar
+actor "Career &\nCounseling Director" as CareerDir
+actor "IT\nAdministrator" as ITAdmin
+
+package "F1: Strategic Management" as F1 {
+    rectangle "Define Mentorship Policy" as F1A
+    rectangle "Allocate Budget" as F1B
+    rectangle "Set Academic Guidelines" as F1C
+}
+
+package "F2: User Registration & Verification" as F2 {
+    rectangle "Register Mentee Users" as F2A
+    rectangle "Register Mentor Applicants" as F2B
+    rectangle "Verify Student Status" as F2C
+    rectangle "Approve Mentor Applications" as F2D
+}
+
+package "F3: Mentorship Matching" as F3 {
+    rectangle "Browse Mentor Profiles" as F3A
+    rectangle "Search by Department" as F3B
+    rectangle "Check Availability" as F3C
+    rectangle "Match Mentee with Mentor" as F3D
+}
+
+package "F4: Session Management" as F4 {
+    rectangle "Schedule Sessions" as F4A
+    rectangle "Send Notifications" as F4B
+    rectangle "Track Attendance" as F4C
+    rectangle "Handle Cancellations" as F4D
+}
+
+package "F5: Feedback Collection" as F5 {
+    rectangle "Collect Session Feedback" as F5A
+    rectangle "Calculate Ratings" as F5B
+    rectangle "Gather Suggestions" as F5C
+}
+
+package "F6: Reporting & Analysis" as F6 {
+    rectangle "Generate Statistics" as F6A
+    rectangle "Analyze Performance" as F6B
+    rectangle "Track Progress" as F6C
+    rectangle "Produce Reports" as F6D
+}
+
+VC --> F1A : directs
+Registrar --> F1A : implements
+CareerDir --> F1A : advises
+
+F1A --> F2A : authorizes
+Registrar --> F2A : manages
+ITAdmin --> F2A : manages
+
+F2A --> F3A : provides users
+CareerDir --> F3A : oversees
+
+F3A --> F4A : creates
+F4A --> F5A : triggers
+
+F5A --> F6A : provides data
+F6A --> VC : reports
+F6A --> Registrar : informs
+F6A --> CareerDir : evaluates
+
+note right of F2
+    Admin Users verify
+    all registrations
+end note
+
+note right of F4
+    Both online and
+    in-person sessions
+    supported
+end note
+
+@enduml

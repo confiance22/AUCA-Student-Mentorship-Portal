@@ -1,0 +1,41 @@
+# ============================================================
+# Docker Compose — Backend + PostgreSQL
+# ============================================================
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: mentorship_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mentorship_portal
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: C123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: .
+    container_name: mentorship_api
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: mentorship_portal
+      DB_USER: postgres
+      DB_PASSWORD: C123
+      JWT_SECRET: auca_mentorship_jwt_secret_2025
+      PORT: 5000
+      CLIENT_URL: http://localhost:5173
+    ports:
+      - "5000:5000"
+
+volumes:
+  pgdata:

@@ -1,0 +1,79 @@
+@startuml AUCA_Mentorship_SequenceDiagram
+
+skinparam backgroundColor white
+skinparam ArrowColor #185FA5
+skinparam ParticipantBackgroundColor #E6F1FB
+skinparam ParticipantBorderColor #185FA5
+skinparam ActorBorderColor #185FA5
+skinparam SequenceLifeLineBorderColor #185FA5
+
+title SEQUENCE DIAGRAM (AUCA STUDENT MENTORSHIP PORTAL)
+
+actor "Mentee User" as Mentee
+actor "Mentor User" as Mentor
+participant "Web Interface" as UI
+participant "Mentorship System" as System
+database "PostgreSQL" as DB
+participant "Notification Service" as Notif
+
+== User Authentication ==
+Mentee -> UI : login(email, password)
+UI -> System : validateUser()
+System -> DB : checkCredentials()
+DB --> System : userData
+System --> UI : authToken
+UI --> Mentee : displayDashboard()
+
+== Mentor Browsing ==
+Mentee -> UI : browseMentors()
+UI -> System : getMentorList()
+System -> DB : fetchApprovedMentors()
+DB --> System : mentorList
+System --> UI : displayMentors()
+UI --> Mentee : showMentorProfiles()
+
+Mentee -> UI : viewMentorDetails(mentorID)
+UI -> System : getMentorProfile()
+System -> DB : fetchMentorData()
+DB --> System : mentorDetails
+System --> UI : displayProfile()
+UI --> Mentee : showAvailability()
+
+== Session Booking ==
+Mentee -> UI : bookSession(mentorID, date, time)
+UI -> System : createSessionRequest()
+System -> DB : saveSession(status=pending)
+DB --> System : sessionID
+System -> Notif : sendNotification(mentorID)
+Notif --> Mentor : emailNotification()
+System --> UI : bookingConfirmed()
+UI --> Mentee : showPendingStatus()
+
+== Session Acceptance ==
+Mentor -> UI : viewPendingRequests()
+UI -> System : getPendingSessions()
+System -> DB : fetchSessions()
+DB --> System : pendingList
+System --> UI : displayRequests()
+UI --> Mentor : showSessionDetails()
+
+Mentor -> UI : acceptSession(sessionID)
+UI -> System : updateSessionStatus(accepted)
+System -> DB : saveStatusChange()
+DB --> System : confirmed
+System -> Notif : sendNotification(menteeID)
+Notif --> Mentee : confirmationEmail()
+System --> UI : updateSuccess()
+UI --> Mentor : showConfirmed()
+
+== Feedback Submission ==
+Mentee -> UI : submitFeedback(sessionID, rating, review)
+UI -> System : saveFeedback()
+System -> DB : storeFeedback()
+DB --> System : saved
+System -> Notif : notifyMentor(mentorID)
+Notif --> Mentor : newFeedbackAlert()
+System --> UI : successMessage()
+UI --> Mentee : thankYouMessage()
+
+@enduml

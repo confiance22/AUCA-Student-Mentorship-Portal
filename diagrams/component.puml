@@ -1,0 +1,105 @@
+@startuml AUCA_Mentorship_ComponentDiagram
+
+skinparam backgroundColor white
+skinparam ArrowColor #185FA5
+skinparam componentBackgroundColor #E6F1FB
+skinparam componentBorderColor #185FA5
+skinparam packageBackgroundColor #FAEEDA
+skinparam packageBorderColor #633806
+skinparam databaseBackgroundColor #E1F5EE
+skinparam databaseBorderColor #085041
+skinparam interfaceBackgroundColor #FDF2E9
+skinparam interfaceBorderColor #7E5109
+
+title COMPONENT DIAGRAM FOR AUCA STUDENT MENTORSHIP PORTAL
+
+package "Client Layer" {
+    [Web Browser] as Browser
+}
+
+package "Frontend Layer (React)" {
+    [Login Component] as LoginUI
+    [Mentor Directory Component] as DirectoryUI
+    [Session Booking Component] as BookingUI
+    [Feedback Component] as FeedbackUI
+    [Admin Dashboard Component] as AdminUI
+    [Notification Component] as NotifUI
+}
+
+package "Backend Layer (Laravel API)" {
+    portin "REST API" as API
+    
+    [Authentication Controller] as AuthController
+    [Mentor Controller] as MentorController
+    [Session Controller] as SessionController
+    [Feedback Controller] as FeedbackController
+    [Notification Controller] as NotifController
+    [Admin Controller] as AdminController
+    [Report Controller] as ReportController
+    
+    [Business Logic Layer] as BusinessLogic
+}
+
+package "Data Layer" {
+    database "PostgreSQL Database" as PostgresDB
+    
+    package "Tables" {
+        [Users] as UsersTbl
+        [MentorProfiles] as MentorTbl
+        [Sessions] as SessionTbl
+        [Feedback] as FeedbackTbl
+        [Notifications] as NotifTbl
+    }
+}
+
+package "External Services" {
+    [Email Service] as EmailSvc
+    [File Storage] as FileStorage
+}
+
+' Frontend to Backend connections
+Browser --> LoginUI : HTTP/HTTPS
+Browser --> DirectoryUI
+Browser --> BookingUI
+Browser --> FeedbackUI
+Browser --> AdminUI
+Browser --> NotifUI
+
+LoginUI --> API : JSON/HTTPS
+DirectoryUI --> API
+BookingUI --> API
+FeedbackUI --> API
+AdminUI --> API
+NotifUI --> API
+
+API --> AuthController
+API --> MentorController
+API --> SessionController
+API --> FeedbackController
+API --> NotifController
+API --> AdminController
+API --> ReportController
+
+' Controllers to Business Logic
+AuthController --> BusinessLogic
+MentorController --> BusinessLogic
+SessionController --> BusinessLogic
+FeedbackController --> BusinessLogic
+NotifController --> BusinessLogic
+AdminController --> BusinessLogic
+ReportController --> BusinessLogic
+
+' Business Logic to Database
+BusinessLogic --> PostgresDB : SQL/PDO
+PostgresDB --> UsersTbl
+PostgresDB --> MentorTbl
+PostgresDB --> SessionTbl
+PostgresDB --> FeedbackTbl
+PostgresDB --> NotifTbl
+
+' External services
+NotifController --> EmailSvc : SMTP
+AuthController --> FileStorage : store profile pics
+MentorController --> FileStorage : store documents
+
+@enduml
