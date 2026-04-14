@@ -1,91 +1,85 @@
-@startuml AUCA_Mentorship_FunctionalDiagram
+@startuml
+title AUCA Student Mentorship Portal - Functional Diagram
 
-skinparam backgroundColor white
-skinparam ArrowColor #185FA5
-skinparam rectangleBackgroundColor #E6F1FB
-skinparam rectangleBorderColor #185FA5
-skinparam packageBackgroundColor #FAEEDA
-skinparam packageBorderColor #633806
-skinparam actorBorderColor #185FA5
-skinparam actorBackgroundColor #E6F1FB
-skinparam noteBackgroundColor #E1F5EE
-skinparam noteBorderColor #085041
-
-title FUNCTIONAL DIAGRAM FOR AUCA STUDENT MENTORSHIP PORTAL
-
-actor "AUCA\nVice Chancellor" as VC
-actor "Academic\nRegistrar" as Registrar
-actor "Career &\nCounseling Director" as CareerDir
-actor "IT\nAdministrator" as ITAdmin
-
-package "F1: Strategic Management" as F1 {
-    rectangle "Define Mentorship Policy" as F1A
-    rectangle "Allocate Budget" as F1B
-    rectangle "Set Academic Guidelines" as F1C
+rectangle "User Management" {
+    usecase "Register Account" as UC1
+    usecase "Login" as UC2
+    usecase "Select Role" as UC3
 }
 
-package "F2: User Registration & Verification" as F2 {
-    rectangle "Register Mentee Users" as F2A
-    rectangle "Register Mentor Applicants" as F2B
-    rectangle "Verify Student Status" as F2C
-    rectangle "Approve Mentor Applications" as F2D
+rectangle "Mentee Functions" {
+    usecase "Browse Mentors" as UC4
+    usecase "Select Mentor" as UC5
+    usecase "Book Session" as UC6
+    usecase "Attend Session" as UC7
+    usecase "Give Feedback" as UC8
 }
 
-package "F3: Mentorship Matching" as F3 {
-    rectangle "Browse Mentor Profiles" as F3A
-    rectangle "Search by Department" as F3B
-    rectangle "Check Availability" as F3C
-    rectangle "Match Mentee with Mentor" as F3D
+rectangle "Mentor Functions" {
+    usecase "View Session Requests" as UC9
+    usecase "Accept Session" as UC10
+    usecase "Decline Session" as UC11
+    usecase "Mark Session Complete" as UC12
+    usecase "Apply to Become Mentor" as UC13
+    usecase "Manage Sessions" as UC14
 }
 
-package "F4: Session Management" as F4 {
-    rectangle "Schedule Sessions" as F4A
-    rectangle "Send Notifications" as F4B
-    rectangle "Track Attendance" as F4C
-    rectangle "Handle Cancellations" as F4D
+rectangle "Admin Functions" {
+    usecase "Review Mentor Application" as UC15
+    usecase "Approve Mentor" as UC16
+    usecase "Reject Mentor" as UC17
+    usecase "Manage System" as UC18
 }
 
-package "F5: Feedback Collection" as F5 {
-    rectangle "Collect Session Feedback" as F5A
-    rectangle "Calculate Ratings" as F5B
-    rectangle "Gather Suggestions" as F5C
+rectangle "Session Status Management" {
+    usecase "Set Status to Pending" as UC19
+    usecase "Set Status to Accepted" as UC20
+    usecase "Set Status to Declined" as UC21
+    usecase "Set Status to Completed" as UC22
 }
 
-package "F6: Reporting & Analysis" as F6 {
-    rectangle "Generate Statistics" as F6A
-    rectangle "Analyze Performance" as F6B
-    rectangle "Track Progress" as F6C
-    rectangle "Produce Reports" as F6D
+rectangle "Notification" {
+    usecase "Notify Mentee of Decision" as UC23
+    usecase "Notify Applicant of Outcome" as UC24
 }
 
-VC --> F1A : directs
-Registrar --> F1A : implements
-CareerDir --> F1A : advises
+actor Mentee
+actor Mentor
+actor Admin
 
-F1A --> F2A : authorizes
-Registrar --> F2A : manages
-ITAdmin --> F2A : manages
+Mentee --> UC1
+Mentee --> UC2
+Mentee --> UC3
+Mentee --> UC4
+Mentee --> UC5
+Mentee --> UC6
+Mentee --> UC7
+Mentee --> UC8
+Mentee --> UC13
 
-F2A --> F3A : provides users
-CareerDir --> F3A : oversees
+Mentor --> UC1
+Mentor --> UC2
+Mentor --> UC3
+Mentor --> UC9
+Mentor --> UC10
+Mentor --> UC11
+Mentor --> UC12
+Mentor --> UC14
 
-F3A --> F4A : creates
-F4A --> F5A : triggers
+Admin --> UC2
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
 
-F5A --> F6A : provides data
-F6A --> VC : reports
-F6A --> Registrar : informs
-F6A --> CareerDir : evaluates
+UC6 --> UC19 : triggers
+UC10 --> UC20 : triggers
+UC11 --> UC21 : triggers
+UC12 --> UC22 : triggers
 
-note right of F2
-    Admin Users verify
-    all registrations
-end note
-
-note right of F4
-    Both online and
-    in-person sessions
-    supported
-end note
+UC10 --> UC23 : triggers
+UC11 --> UC23 : triggers
+UC16 --> UC24 : triggers
+UC17 --> UC24 : triggers
 
 @enduml

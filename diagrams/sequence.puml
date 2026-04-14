@@ -1,79 +1,121 @@
-@startuml AUCA_Mentorship_SequenceDiagram
+@startuml
+title AUCA Student Mentorship Portal - Sequence Diagram
 
-skinparam backgroundColor white
-skinparam ArrowColor #185FA5
-skinparam ParticipantBackgroundColor #E6F1FB
-skinparam ParticipantBorderColor #185FA5
-skinparam ActorBorderColor #185FA5
-skinparam SequenceLifeLineBorderColor #185FA5
+actor Mentee
+actor Mentor
+actor Admin
+participant "Portal Website" as UI
+participant "Portal System" as Server
+participant "Status Tracker" as Status
+participant "Notification Sender" as Notif
+database "Database" as DB
 
-title SEQUENCE DIAGRAM (AUCA STUDENT MENTORSHIP PORTAL)
+== User Registration ==
+Mentee -> UI : opens the portal
+UI -> Server : submits registration details
+Server -> DB : saves new user
+DB --> Server : user saved
+Server --> UI : registration successful
+UI --> Mentee : shows success message
 
-actor "Mentee User" as Mentee
-actor "Mentor User" as Mentor
-participant "Web Interface" as UI
-participant "Mentorship System" as System
-database "PostgreSQL" as DB
-participant "Notification Service" as Notif
+== Mentee Books a Session ==
+Mentee -> UI : browses available mentors
+UI -> Server : requests mentor list
+Server -> DB : fetches mentors
+DB --> Server : returns mentor list
+Server --> UI : displays mentors
+Mentee -> UI : selects a mentor and books session
+UI -> Server : sends booking request
+Server -> Status : mark session as Pending
+Status -> DB : saves Pending
+DB --> Status : confirmed
+Status --> Server : status updated
+Server --> UI : booking confirmed
+UI --> Mentee : session is Pending
 
-== User Authentication ==
-Mentee -> UI : login(email, password)
-UI -> System : validateUser()
-System -> DB : checkCredentials()
-DB --> System : userData
-System --> UI : authToken
-UI --> Mentee : displayDashboard()
+== Mentor Responds to Session Request ==
+Mentor -> UI : views incoming session requests
+UI -> Server : requests pending sessions
+Server -> DB : fetches pending sessions
+DB --> Server : returns session list
+Server --> UI : shows session requests
+Mentor -> UI : accepts or declines session
 
-== Mentor Browsing ==
-Mentee -> UI : browseMentors()
-UI -> System : getMentorList()
-System -> DB : fetchApprovedMentors()
-DB --> System : mentorList
-System --> UI : displayMentors()
-UI --> Mentee : showMentorProfiles()
+alt Mentor Accepts
+    UI -> Server : sends acceptance
+    Server -> Status : mark session as Accepted
+    Status -> DB : saves Accepted
+    DB --> Status : confirmed
+    Server -> Notif : tell mentee session is accepted
+    Notif --> Mentee : your session has been accepted
+    Server --> UI : session accepted
+    UI --> Mentor : acceptance confirmed
 
-Mentee -> UI : viewMentorDetails(mentorID)
-UI -> System : getMentorProfile()
-System -> DB : fetchMentorData()
-DB --> System : mentorDetails
-System --> UI : displayProfile()
-UI --> Mentee : showAvailability()
+    == Session Completion ==
+    Mentee -> UI : attends the session
+    Mentor -> UI : marks session as complete
+    UI -> Server : sends completion update
+    Server -> Status : mark session as Completed
+    Status -> DB : saves Completed
+    DB --> Status : confirmed
+    Server --> UI : session marked complete
 
-== Session Booking ==
-Mentee -> UI : bookSession(mentorID, date, time)
-UI -> System : createSessionRequest()
-System -> DB : saveSession(status=pending)
-DB --> System : sessionID
-System -> Notif : sendNotification(mentorID)
-Notif --> Mentor : emailNotification()
-System --> UI : bookingConfirmed()
-UI --> Mentee : showPendingStatus()
+    == Mentee Gives Feedback ==
+    Mentee -> UI : writes and submits feedback
+    UI -> Server : sends feedback
+    Server -> DB : saves feedback
+    DB --> Server : feedback saved
+    Server --> UI : feedback received
+    UI --> Mentee : thank you for your feedback
 
-== Session Acceptance ==
-Mentor -> UI : viewPendingRequests()
-UI -> System : getPendingSessions()
-System -> DB : fetchSessions()
-DB --> System : pendingList
-System --> UI : displayRequests()
-UI --> Mentor : showSessionDetails()
+else Mentor Declines
+    UI -> Server : sends decline
+    Server -> Status : mark session as Declined
+    Status -> DB : saves Declined
+    DB --> Status : confirmed
+    Server -> Notif : tell mentee session is declined
+    Notif --> Mentee : your session has been declined
+    Server --> UI : session declined
+    UI --> Mentor : decline confirmed
+end
 
-Mentor -> UI : acceptSession(sessionID)
-UI -> System : updateSessionStatus(accepted)
-System -> DB : saveStatusChange()
-DB --> System : confirmed
-System -> Notif : sendNotification(menteeID)
-Notif --> Mentee : confirmationEmail()
-System --> UI : updateSuccess()
-UI --> Mentor : showConfirmed()
+== Student Applies to Become a Mentor ==
+Mentee -> UI : fills in mentor application form
+UI -> Server : submits application
+Server -> Status : mark application as Pending Approval
+Status -> DB : saves Pending Approval
+DB --> Status : confirmed
+Server --> UI : application submitted
+UI --> Mentee : your application is under review
 
-== Feedback Submission ==
-Mentee -> UI : submitFeedback(sessionID, rating, review)
-UI -> System : saveFeedback()
-System -> DB : storeFeedback()
-DB --> System : saved
-System -> Notif : notifyMentor(mentorID)
-Notif --> Mentor : newFeedbackAlert()
-System --> UI : successMessage()
-UI --> Mentee : thankYouMessage()
+== Admin Reviews Mentor Application ==
+Admin -> UI : logs in and opens applications
+UI -> Server : requests pending applications
+Server -> DB : fetches applications
+DB --> Server : returns applications
+Server --> UI : shows pending applications
+
+alt Admin Approves
+    Admin -> UI : clicks approve
+    UI -> Server : sends approval
+    Server -> Status : mark application as Approved
+    Status -> DB : saves Approved
+    DB --> Status : confirmed
+    Server -> Notif : tell applicant they are approved
+    Notif --> Mentee : your mentor application was approved
+    Server --> UI : application approved
+    UI --> Admin : approval confirmed
+
+else Admin Rejects
+    Admin -> UI : clicks reject
+    UI -> Server : sends rejection
+    Server -> Status : mark application as Rejected
+    Status -> DB : saves Rejected
+    DB --> Status : confirmed
+    Server -> Notif : tell applicant they are rejected
+    Notif --> Mentee : your mentor application was rejected
+    Server --> UI : application rejected
+    UI --> Admin : rejection confirmed
+end
 
 @enduml

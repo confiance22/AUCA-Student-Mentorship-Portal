@@ -1,114 +1,87 @@
-@startuml AUCA_Mentorship_ActivityDiagram
+@startuml
+title AUCA Student Mentorship Portal - Activity Diagram
 
-skinparam backgroundColor white
-skinparam ArrowColor #185FA5
-skinparam ActivityBackgroundColor #E6F1FB
-skinparam ActivityBorderColor #185FA5
-skinparam ActivityDiamondBackgroundColor #FAEEDA
-skinparam ActivityDiamondBorderColor #633806
-skinparam StartColor #185FA5
-skinparam EndColor #185FA5
 
-title ACTIVITY DIAGRAM FOR AUCA STUDENT MENTORSHIP PORTAL
 
-|Admin User|
+legend right
+  | Swimlane | Meaning |
+  | Any User | Any User (Mentor/Mentee/Admin) |
+  | Mentee | Mentee User (Student) |
+  | Mentor | Mentor User (Senior Student/Lecturer) |
+  | Admin | Admin User (System Administrator) |
+endlegend
+
+|Any User|
 start
-:Manage System;
-
-|Mentor User|
-:Apply as Mentor;
-
-|Admin User|
-:Review Application;
-
-if (Approved?) then (yes)
-    :Activate Mentor Account;
-else (no)
-    :Reject Application;
-    |Mentor User|
-    :Receive Rejection;
-    stop
-endif
-
-|Mentee User|
 :Register Account;
-:Login to System;
+:Select Role;
 
-if (Valid Credentials?) then (yes)
-    :Access Dashboard;
-else (no)
-    :Show Error;
+if (Role is Mentee?) then (yes)
+  
+  |Mentee|
+  :Login;
+  :Browse Mentors;
+  :Select Mentor;
+  :Book Session;
+  :System Creates Session;
+  :Status PENDING;
+  
+  |Mentor|
+  :View Request;
+  :Make Decision;
+  
+  if (Accept?) then (yes)
+    :Accept Session;
+    :Status ACCEPTED;
+    :Mentee Attends;
+    :Mark Complete;
+    :Status COMPLETED;
+    :Mentee Gives Feedback;
+    :Store Feedback;
     stop
-endif
-
-:Complete Profile;
-:Browse Mentor Directory;
-
-while (Mentor Selected?) is (no)
-    :Search by Department/Expertise;
     
-    if (Mentor Found?) then (yes)
-        :View Mentor Profile;
-        :Check Availability;
-        
-        if (Available?) then (yes)
-            :Select Mentor;
-        else (no)
-            :View Other Mentors;
-        endif
-    else (no)
-        :Refine Search Criteria;
-    endif
-endwhile (yes)
-
-:Book Session\n(Select date, time, topic);
-:Submit Booking Request;
-
-|Mentor User|
-:Receive Booking Notification;
-:Review Request;
-
-if (Accept Request?) then (yes)
-    :Confirm Session;
-    
-    |Mentee User|
-    :Receive Confirmation;
-    
-    fork
-        :Attend Session;
-    fork again
-        |Mentor User|
-        :Prepare for Session;
-    end fork
-    
-    if (Session Completed?) then (yes)
-        :Mark as Completed;
-        
-        fork
-            |Mentee User|
-            :Submit Feedback & Rating;
-        fork again
-            |Mentor User|
-            :View Feedback;
-        end fork
-        
-    else (cancelled)
-        :Cancel Session;
-        :Notify Cancellation;
-    endif
-    
+  else (no)
+    :Decline Session;
+    :Status DECLINED;
+    stop
+  endif
+  
 else (no)
-    :Decline Request;
+  
+  |Any User|
+  if (Role is Mentor Applicant?) then (yes)
     
-    |Mentee User|
-    :Receive Decline Notification;
-    :Return to Browse;
-    detach
-endif
+    |Mentor|
+    :Apply as Mentor;
+    :Status PENDING_APPROVAL;
+    
+    |Admin|
+    :Review Application;
+    
+    if (Approve?) then (yes)
+      :Approve Mentor;
+      :Status APPROVED;
+      
+      |Mentor|
+      :Login as Mentor;
+      :Manage Sessions;
+      stop
+      
+    else (no)
+      :Reject Application;
+      :Status REJECTED;
+      stop
+    endif
+    
+  else (no)
+    
+    |Admin|
+    :Login as Admin;
+    :Manage System;
+    stop
+    
+  endif
 
-|Admin User|
-:Generate Session Reports;
-:Monitor System Activity;
-stop
+endif
 
 @enduml

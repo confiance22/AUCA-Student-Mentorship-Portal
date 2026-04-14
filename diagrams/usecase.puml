@@ -1,54 +1,40 @@
-@startuml AUCA_Mentorship_UseCase
-
-skinparam actorStyle awesome
+@startuml
+left to right direction
 skinparam packageStyle rectangle
-skinparam backgroundColor white
-skinparam ArrowColor #185FA5
-skinparam ActorBorderColor #185FA5
-skinparam UsecaseBorderColor #185FA5
-skinparam UsecaseBackgroundColor #E6F1FB
+skinparam actorStyle awesome
 
 title AUCA Student Mentorship Portal - Use Case Diagram
 
-actor "Mentee User" as Mentee
-actor "Mentor User" as Mentor
-actor "Admin User" as Admin
+' ACTORS on LEFT side
+actor "Mentee" as Mentee
+actor "Mentor" as Mentor
 
-rectangle "AUCA Student Mentorship Portal" {
-
-    package "Authentication" {
-        usecase "Register Account" as UC1
-        usecase "Login" as UC2
-        usecase "Manage Profile" as UC3
-    }
-
-    package "Mentor Discovery" {
-        usecase "Browse Mentor Directory" as UC4
-        usecase "Search Mentor by Department" as UC5
-        usecase "View Mentor Profile" as UC6
-    }
-
-    package "Session Management" {
-        usecase "Book a Session" as UC7
-        usecase "Accept / Decline Session" as UC8
-        usecase "Cancel Session" as UC9
-        usecase "View Session History" as UC10
-    }
-
-    package "Feedback & Ratings" {
-        usecase "Rate Mentor" as UC11
-        usecase "Write Session Review" as UC12
-        usecase "View My Ratings" as UC13
-    }
-
-    package "Admin Management" {
-        usecase "Approve Mentor Application" as UC14
-        usecase "Manage Users" as UC15
-        usecase "Generate Reports" as UC16
-        usecase "View All Sessions" as UC17
-    }
+rectangle "Mentorship Portal System" {
+    
+    usecase "Register\nAccount" as UC1
+    usecase "Login" as UC2
+    usecase "Logout" as UC3
+    
+    usecase "Browse\nMentors" as UC4
+    usecase "Book\nSession" as UC5
+    usecase "View My\nSessions" as UC6
+    usecase "Cancel\nSession" as UC7
+    
+    usecase "Accept or\nDecline Session" as UC8
+    usecase "Mark Session\nComplete" as UC9
+    
+    usecase "Submit\nFeedback" as UC10
+    usecase "View Received\nFeedback" as UC11
+    
+    usecase "Apply as\nMentor" as UC12
+    usecase "Approve Mentor\nApplication" as UC13
+    usecase "View System\nReports" as UC14
 }
 
+' ACTOR on RIGHT side
+actor "Admin\nUser" as Admin
+
+' MENTEE relationships (left side)
 Mentee --> UC1
 Mentee --> UC2
 Mentee --> UC3
@@ -56,28 +42,32 @@ Mentee --> UC4
 Mentee --> UC5
 Mentee --> UC6
 Mentee --> UC7
-Mentee --> UC9
 Mentee --> UC10
-Mentee --> UC11
 Mentee --> UC12
 
+' MENTOR relationships (left side)
 Mentor --> UC1
 Mentor --> UC2
 Mentor --> UC3
+Mentor --> UC6
 Mentor --> UC8
 Mentor --> UC9
-Mentor --> UC10
-Mentor --> UC13
+Mentor --> UC11
 
+' ADMIN relationships (right side)
+Admin --> UC1
 Admin --> UC2
+Admin --> UC3
+Admin --> UC13
 Admin --> UC14
-Admin --> UC15
-Admin --> UC16
-Admin --> UC17
 
-UC5 .> UC4 : <<extends>>
-UC6 .> UC4 : <<extends>>
-UC7 .> UC6 : <<includes>>
-UC12 .> UC11 : <<includes>>
+' INCLUDE and EXTEND
+UC5 ..> UC6 : <<include>>
+UC10 ..> UC9 : <<extend>>
+
+note left of UC13
+  Only Admin User can 
+  approve mentor applications
+end note
 
 @enduml

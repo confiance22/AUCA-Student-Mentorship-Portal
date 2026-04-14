@@ -1,100 +1,68 @@
-@startuml AUCA_Mentorship_ClassDiagram
-
-skinparam backgroundColor white
-skinparam ArrowColor #185FA5
-skinparam classBackgroundColor #E6F1FB
-skinparam classBorderColor #185FA5
+@startuml
 skinparam classAttributeIconSize 0
-skinparam CircledCharacterFontSize 11
-skinparam CircledCharacterRadius 10
 
-title CLASS DIAGRAM FOR AUCA STUDENT MENTORSHIP PORTAL
+title AUCA Mentorship Portal - Class Diagram
 
 class User {
-    userID: int
-    fullName: String
-    email: String
-    password: String
-    role: String
-    department: String
-    createdAt: DateTime
-    --
-    Persistent
+  -id: int
+  -name: string
+  -email: string
+  -password_hash: string
+  -role: string
+  -bio: string
+  +register()
+  +login()
+  +updateProfile()
 }
 
 class MentorProfile {
-    mentorID: int
-    userID: int
-    expertise: String
-    guidanceType: String
-    mentorType: String
-    availability: String
-    isApproved: boolean
-    bio: String
-    --
-    Persistent
-}
-
-class MenteeProfile {
-    menteeID: int
-    userID: int
-    yearOfStudy: int
-    academicGoals: String
-    careerGoals: String
-    --
-    Persistent
+  -id: int
+  -expertise: array
+  -department: string
+  -approval_status: string
+  -availability: string
+  +applyAsMentor()
+  +getApprovedMentors()
 }
 
 class Session {
-    sessionID: int
-    menteeID: int
-    mentorID: int
-    sessionDate: Date
-    sessionTime: Time
-    topic: String
-    guidanceType: String
-    status: String
-    notes: String
-    --
-    Persistent
+  -id: int
+  -title: string
+  -description: string
+  -scheduled_at: datetime
+  -status: string
+  -duration: int
+  +bookSession()
+  +acceptSession()
+  +completeSession()
 }
 
 class Feedback {
-    feedbackID: int
-    sessionID: int
-    menteeID: int
-    mentorID: int
-    rating: int
-    review: String
-    createdAt: DateTime
-    --
-    Persistent
+  -id: int
+  -rating: int
+  -review: string
+  +submitFeedback()
+  +getMentorFeedback()
 }
 
-class Notification {
-    notificationID: int
-    userID: int
-    message: String
-    isRead: boolean
-    timestamp: DateTime
-    --
-    Persistent
-}
+User "1" -- "0..1" MentorProfile : has
+User "1" -- "0..*" Session : books
+User "1" -- "0..*" Session : mentors
+Session "1" -- "0..1" Feedback : receives
+User "1" -- "0..*" Feedback : gives
+User "1" -- "0..*" Feedback : receives
 
-class AdminUser {
-    adminID: int
-    userID: int
-    role: String
-    --
-    Persistent
-}
+note right of User
+  role can be:
+  'mentee', 'mentor', 
+  or 'admin'
+end note
 
-User "1" --> "0..1" MentorProfile : registers as
-User "1" --> "0..1" MenteeProfile : registers as
-User "1" --> "0..1" AdminUser : manages as
-MenteeProfile "1" --> "0..*" Session : books
-MentorProfile "1" --> "0..*" Session : handles
-Session "1" --> "0..1" Feedback : receives
-User "1" --> "0..*" Notification : receives
+note bottom of Session
+  status can be:
+  pending, accepted,
+  declined, completed,
+  cancelled
+end note
 
 @enduml

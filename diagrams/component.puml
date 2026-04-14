@@ -1,105 +1,58 @@
-@startuml AUCA_Mentorship_ComponentDiagram
+@startuml
+title AUCA Mentorship Portal - Component Diagram
 
-skinparam backgroundColor white
-skinparam ArrowColor #185FA5
-skinparam componentBackgroundColor #E6F1FB
-skinparam componentBorderColor #185FA5
-skinparam packageBackgroundColor #FAEEDA
-skinparam packageBorderColor #633806
-skinparam databaseBackgroundColor #E1F5EE
-skinparam databaseBorderColor #085041
-skinparam interfaceBackgroundColor #FDF2E9
-skinparam interfaceBorderColor #7E5109
-
-title COMPONENT DIAGRAM FOR AUCA STUDENT MENTORSHIP PORTAL
-
-package "Client Layer" {
-    [Web Browser] as Browser
+package "Frontend" {
+    [React App] as React
+    [Auth Context] as Auth
+    [Role Selector] as RoleSelector
 }
 
-package "Frontend Layer (React)" {
-    [Login Component] as LoginUI
-    [Mentor Directory Component] as DirectoryUI
-    [Session Booking Component] as BookingUI
-    [Feedback Component] as FeedbackUI
-    [Admin Dashboard Component] as AdminUI
-    [Notification Component] as NotifUI
+package "Backend" {
+    [Express Server] as Express
+    [JWT Middleware] as JWT
+    [Auth Routes] as AuthR
+    [User Routes] as UserR
+    [Session Routes] as SessionR
+    [Feedback Routes] as FeedbackR
+    [Mentor Application Routes] as MentorAppR
+    [Status Service] as StatusSvc
+    [Notification Service] as NotifSvc
 }
 
-package "Backend Layer (Laravel API)" {
-    portin "REST API" as API
-    
-    [Authentication Controller] as AuthController
-    [Mentor Controller] as MentorController
-    [Session Controller] as SessionController
-    [Feedback Controller] as FeedbackController
-    [Notification Controller] as NotifController
-    [Admin Controller] as AdminController
-    [Report Controller] as ReportController
-    
-    [Business Logic Layer] as BusinessLogic
+package "Database" {
+    [PostgreSQL] as DB
+    [Users Table] as Users
+    [Sessions Table] as Sessions
+    [Feedback Table] as Feedbacks
+    [Mentor Applications Table] as MentorApps
 }
 
-package "Data Layer" {
-    database "PostgreSQL Database" as PostgresDB
-    
-    package "Tables" {
-        [Users] as UsersTbl
-        [MentorProfiles] as MentorTbl
-        [Sessions] as SessionTbl
-        [Feedback] as FeedbackTbl
-        [Notifications] as NotifTbl
-    }
-}
+[Browser] as Browser
 
-package "External Services" {
-    [Email Service] as EmailSvc
-    [File Storage] as FileStorage
-}
-
-' Frontend to Backend connections
-Browser --> LoginUI : HTTP/HTTPS
-Browser --> DirectoryUI
-Browser --> BookingUI
-Browser --> FeedbackUI
-Browser --> AdminUI
-Browser --> NotifUI
-
-LoginUI --> API : JSON/HTTPS
-DirectoryUI --> API
-BookingUI --> API
-FeedbackUI --> API
-AdminUI --> API
-NotifUI --> API
-
-API --> AuthController
-API --> MentorController
-API --> SessionController
-API --> FeedbackController
-API --> NotifController
-API --> AdminController
-API --> ReportController
-
-' Controllers to Business Logic
-AuthController --> BusinessLogic
-MentorController --> BusinessLogic
-SessionController --> BusinessLogic
-FeedbackController --> BusinessLogic
-NotifController --> BusinessLogic
-AdminController --> BusinessLogic
-ReportController --> BusinessLogic
-
-' Business Logic to Database
-BusinessLogic --> PostgresDB : SQL/PDO
-PostgresDB --> UsersTbl
-PostgresDB --> MentorTbl
-PostgresDB --> SessionTbl
-PostgresDB --> FeedbackTbl
-PostgresDB --> NotifTbl
-
-' External services
-NotifController --> EmailSvc : SMTP
-AuthController --> FileStorage : store profile pics
-MentorController --> FileStorage : store documents
+Browser --> React : opens the app
+React --> Auth : checks login state
+React --> RoleSelector : picks a role
+RoleSelector --> Express : sends chosen role
+React --> Express : makes requests
+Express --> JWT : checks identity
+Express --> AuthR : login and register
+Express --> UserR : manage users
+Express --> SessionR : manage sessions
+Express --> FeedbackR : manage feedback
+Express --> MentorAppR : manage mentor applications
+SessionR --> StatusSvc : updates session status
+MentorAppR --> StatusSvc : updates application status
+SessionR --> NotifSvc : notifies mentee of decision
+MentorAppR --> NotifSvc : notifies applicant of outcome
+AuthR --> DB : reads and writes
+UserR --> DB : reads and writes
+SessionR --> DB : reads and writes
+FeedbackR --> DB : reads and writes
+MentorAppR --> DB : reads and writes
+StatusSvc --> DB : saves status changes
+DB --> Users : stores user records
+DB --> Sessions : stores session records
+DB --> Feedbacks : stores feedback records
+DB --> MentorApps : stores application records
 
 @enduml
