@@ -4,7 +4,7 @@ const { submitFeedback, getMentorFeedback, getAllFeedback } = require('../contro
 const { authenticate, authorize } = require('../middlewares/authMiddleware');
 
 router.post('/',              authenticate, authorize('mentee'), submitFeedback);
-router.get('/mentor/:id',     authenticate, getMentorFeedback);
+router.get('/mentor/:id',     authenticate, getMentorFeedback); 
 router.get('/',               authenticate, authorize('admin'), getAllFeedback);
 
 module.exports = router;
