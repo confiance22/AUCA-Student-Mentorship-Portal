@@ -45,9 +45,7 @@ docker-compose up --build
 | Role   | Email                  | Password    |
 |--------|------------------------|-------------|
 | Admin  | admin@auca.ac.rw       | password123 |
-| Mentor | jeanpaul@auca.ac.rw    | password123 |
-| Mentor | alice@auca.ac.rw       | password123 |
-| Mentee | bob@auca.ac.rw         | password123 |
+
 
 ## API Endpoints
 
