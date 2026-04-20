@@ -89,7 +89,7 @@ git clone https://github.com/confiance22/AUCA-Student-Mentorship-Portal.git
 cd AUCA-Student-Mentorship-Portal
 
 # 2. Setup the database
-psql -U postgres -c "CREATE DATABASE mentorship_portal;"
+psql -U postgres -c "CREATE DATABASE auca_mentorship_db;"
 psql -U postgres -d mentorship_portal -f database/schema.sql
 psql -U postgres -d mentorship_portal -f database/seed.sql
 
