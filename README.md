@@ -44,31 +44,31 @@ The portal operates with three distinct user roles — **Mentee**, **Mentor**, a
 AUCA-Student-Mentorship-Portal/
 ├── backend/
 │   └── src/
-│       ├── config/         # PostgreSQL connection pool (Singleton)
-│       ├── controllers/    # Business logic (MVC Controller layer)
-│       ├── middlewares/    # JWT auth + global error handler
-│       ├── models/         # Database queries (Repository pattern)
-│       ├── routes/         # API endpoint definitions
-│       ├── utils/          # Shared helper functions (DRY)
-│       ├── app.js          # Express app setup
-│       └── server.js       # HTTP server entry point
+│       ├── config/         
+│       ├── controllers/    
+│       ├── middlewares/    
+│       ├── models/        
+│       ├── routes/       
+│       ├── utils/         
+│       ├── app.js          
+│       └── server.js      
 ├── frontend/
 │   └── src/
-│       ├── components/     # Navbar, MentorCard, SessionCard
-│       ├── context/        # AuthContext (Context API pattern)
-│       ├── pages/          # Login, Register, Dashboard, Mentors, Sessions, Feedback
-│       ├── services/       # Centralized API service (api.js)
-│       └── styles/         # Premium CSS (Navy + Gold theme)
+│       ├── components/     
+│       ├── context/        
+│       ├── pages/          
+│       ├── services/      
+│       └── styles/        
 ├── database/
-│   ├── schema.sql          # Table definitions and indexes
-│   └── seed.sql            # Initial test data
+│   ├── schema.sql          
+│   └── seed.sql           
 ├── tests/
-│   ├── unit/               # auth, session, feedback unit tests
-│   └── integration/        # auth, session integration tests
-├── diagrams/               # UML diagrams (PlantUML)
-├── docs/                   # Project documentation
-├── Dockerfile              # Backend container definition
-├── docker-compose.yml      # Multi-service orchestration
+│   ├── unit/               
+│   └── integration/       
+├── diagrams/            
+├── docs/                  
+├── Dockerfile            
+├── docker-compose.yml    
 └── README.md
 ```
 
@@ -125,9 +125,11 @@ API will be available at `http://localhost:5000`
 | Role | Email | Password |
 |---|---|---|
 | Admin | admin@auca.ac.rw | password123 |
-| Mentor | jeanpaul@auca.ac.rw | password123 |
-| Mentor | alice@auca.ac.rw | password123 |
-| Mentee | bob@auca.ac.rw | password123 |
+| Mentor | mentor1@auca.ac.rw | password |
+| Mentor | mentor2@auca.ac.rw | password |
+| Mentee | aime@auca.ac.rw | password |
+
+etc....
 
 ---
 
