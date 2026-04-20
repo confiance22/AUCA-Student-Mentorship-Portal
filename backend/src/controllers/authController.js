@@ -1,7 +1,7 @@
 // ============================================================
 // Auth Controller — Register & Login
 // ============================================================
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const MentorProfile = require('../models/MentorProfile');
 const { generateToken, sendSuccess, sendError } = require('../utils/helpers');

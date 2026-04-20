@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { register, login, getMe } = require('../controllers/authController');
 const { authenticate } = require('../middlewares/authMiddleware');
-const bcrypt = require('bcryptjs'); // Added for the fix
+const bcrypt = require('bcrypt'); // Added for the fix
 const pool = require('../config/db'); // Ensure this points to your DB config
 
 router.post('/register', register);

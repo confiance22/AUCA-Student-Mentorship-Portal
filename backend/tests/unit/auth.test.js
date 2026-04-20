@@ -3,6 +3,7 @@
 // ============================================================
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../../src/utils/helpers');
+
 describe('Auth Utilities', () => {
   test('generateToken returns a string', () => {
     const token = generateToken(1, 'mentee');
