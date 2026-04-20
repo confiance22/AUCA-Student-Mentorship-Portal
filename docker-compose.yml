@@ -1,15 +1,10 @@
-# ============================================================
-# Docker Compose — Backend + PostgreSQL
-# ============================================================
-version: '3.9'
-
 services:
   db:
     image: postgres:15-alpine
     container_name: mentorship_db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: mentorship_portal
+      POSTGRES_DB: auca_mentorship_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: C123
     volumes:
