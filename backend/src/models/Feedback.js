@@ -51,6 +51,12 @@ const Feedback = {
     `);
     return rows;
   },
+
+  /** Delete feedback (admin) */
+  delete: async (id) => {
+    const { rowCount } = await db.query('DELETE FROM feedback WHERE id = $1', [id]);
+    return rowCount > 0;
+  },
 };
 
 module.exports = Feedback;

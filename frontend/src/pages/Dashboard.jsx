@@ -41,6 +41,30 @@ export default function Dashboard() {
     } catch (err) { alert(err.message); }
   };
 
+  const handleDeleteUser = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
+    try {
+      await api.deleteUser(id);
+      setAllUsers((prev) => prev.filter((u) => u.id !== id));
+    } catch (err) { alert(err.message); }
+  };
+
+  const handleDeleteSession = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this session?')) return;
+    try {
+      await api.deleteSession(id);
+      setSessions((prev) => prev.filter((s) => s.id !== id));
+    } catch (err) { alert(err.message); }
+  };
+
+  const handleDeleteFeedback = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this feedback?')) return;
+    try {
+      await api.deleteFeedback(id);
+      setFeedback((prev) => prev.filter((f) => f.id !== id));
+    } catch (err) { alert(err.message); }
+  };
+
   return (
     <div className="page">
       <div className="page-header">
@@ -133,6 +157,94 @@ export default function Dashboard() {
                     <td>
                       <button className="btn btn-success btn-xs" onClick={() => handleApprove(p.user_id, 'approved')}>Approve</button>
                       <button className="btn btn-danger btn-xs ml-1"  onClick={() => handleApprove(p.user_id, 'rejected')}>Reject</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Admin: Manage Users */}
+      {user?.role === 'admin' && (
+        <div className="section mt-4">
+          <h2 className="section-title">Manage All Users</h2>
+          <div className="table-wrapper">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allUsers.map((u) => (
+                  <tr key={u.id}>
+                    <td>{u.name}</td>
+                    <td>{u.email}</td>
+                    <td><span className={`role-badge role-${u.role}`}>{u.role}</span></td>
+                    <td>{new Date(u.created_at).toLocaleDateString()}</td>
+                    <td>
+                      <button className="btn btn-danger btn-xs" onClick={() => handleDeleteUser(u.id)}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Admin: Manage Sessions */}
+      {user?.role === 'admin' && (
+        <div className="section mt-4">
+          <h2 className="section-title">Manage All Sessions</h2>
+          <div className="table-wrapper">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Title</th><th>Mentor</th><th>Mentee</th><th>Status</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sessions.map((s) => (
+                  <tr key={s.id}>
+                    <td>{s.title}</td>
+                    <td>{s.mentor_name}</td>
+                    <td>{s.mentee_name}</td>
+                    <td><span className={`status-badge status-${s.status}`}>{s.status}</span></td>
+                    <td>
+                      <button className="btn btn-danger btn-xs" onClick={() => handleDeleteSession(s.id)}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Admin: Manage Feedback */}
+      {user?.role === 'admin' && (
+        <div className="section mt-4">
+          <h2 className="section-title">Manage All Feedback</h2>
+          <div className="table-wrapper">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Session</th><th>Mentor</th><th>Mentee</th><th>Rating</th><th>Review</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {feedback.map((f) => (
+                  <tr key={f.id}>
+                    <td>{f.session_title}</td>
+                    <td>{f.mentor_name}</td>
+                    <td>{f.mentee_name}</td>
+                    <td>{f.rating} ⭐</td>
+                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.review}</td>
+                    <td>
+                      <button className="btn btn-danger btn-xs" onClick={() => handleDeleteFeedback(f.id)}>Delete</button>
                     </td>
                   </tr>
                 ))}

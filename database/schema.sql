@@ -65,13 +65,24 @@ CREATE TABLE feedback (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Notifications for users
+CREATE TABLE notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- Indexes for performance
 CREATE INDEX idx_sessions_mentor ON sessions(mentor_id);
 CREATE INDEX idx_sessions_mentee ON sessions(mentee_id);
 CREATE INDEX idx_feedback_mentor ON feedback(mentor_id);
 CREATE INDEX idx_mentor_profiles_status ON mentor_profiles(approval_status);
+CREATE INDEX idx_notifications_user ON notifications(user_id);
 
-TRUNCATE feedback, sessions, mentor_profiles, users RESTART IDENTITY CASCADE;
+TRUNCATE feedback, sessions, mentor_profiles, notifications, users RESTART IDENTITY CASCADE;
 -- ============================================================
 -- Seed Data for AUCA Mentorship Portal
 -- Admin password: password123 | Others password: password
@@ -92,7 +103,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- ============================================================
 
 -- 1. Clear everything
-TRUNCATE feedback, sessions, mentor_profiles, users RESTART IDENTITY CASCADE;
+TRUNCATE feedback, sessions, mentor_profiles, notifications, users RESTART IDENTITY CASCADE;
 
 -- 2. Insert Users using crypt()
 -- This generates a fresh, local hash for 'password123' and 'password'

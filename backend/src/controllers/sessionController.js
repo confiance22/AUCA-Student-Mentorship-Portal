@@ -4,6 +4,7 @@
 const Session = require('../models/Session');
 const MentorProfile = require('../models/MentorProfile');
 const { sendSuccess, sendError } = require('../utils/helpers');
+const db = require('../config/db');
 
 /** POST /api/sessions — Mentee books a session */
 const bookSession = async (req, res, next) => {
@@ -26,6 +27,13 @@ const bookSession = async (req, res, next) => {
       duration_minutes,
       meeting_link,
     });
+    
+    // Notify the mentor
+    await db.query(
+      'INSERT INTO notifications (user_id, message) VALUES ($1, $2)',
+      [mentor_id, `New session booked: ${title}`]
+    );
+
     sendSuccess(res, session, 'Session booked', 201);
   } catch (err) { next(err); }
 };
@@ -60,8 +68,24 @@ const updateSessionStatus = async (req, res, next) => {
       return sendError(res, 'Only the mentor can accept or decline', 403);
 
     const updated = await Session.updateStatus(session.id, status);
+
+    // Notify the mentee
+    await db.query(
+      'INSERT INTO notifications (user_id, message) VALUES ($1, $2)',
+      [session.mentee_id, `Your session "${session.title}" was ${status}`]
+    );
+
     sendSuccess(res, updated, `Session ${status}`);
   } catch (err) { next(err); }
 };
 
-module.exports = { bookSession, getMySessions, updateSessionStatus };
+/** DELETE /api/sessions/:id — Delete session (admin) */
+const deleteSession = async (req, res, next) => {
+  try {
+    const success = await Session.delete(parseInt(req.params.id));
+    if (!success) return sendError(res, 'Session not found', 404);
+    sendSuccess(res, null, 'Session deleted successfully');
+  } catch (err) { next(err); }
+};
+
+module.exports = { bookSession, getMySessions, updateSessionStatus, deleteSession };

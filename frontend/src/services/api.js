@@ -31,17 +31,24 @@ export const api = {
   // Users / Mentors
   getMentors:       ()         => request('GET',   '/users/mentors'),
   getPending:       ()         => request('GET',   '/users/pending'),
-  getAllUsers:       ()         => request('GET',   '/users'),
+  getAllUsers:      ()         => request('GET',   '/users'),
   approveMentor:    (id, body) => request('PATCH', `/users/${id}/approve`, body),
   updateProfile:    (body)     => request('PUT',   '/users/profile', body),
+  deleteUser:       (id)       => request('DELETE', `/users/${id}`),
 
   // Sessions
   bookSession:        (body)     => request('POST',  '/sessions', body),
   getMySessions:      ()         => request('GET',   '/sessions'),
   updateSessionStatus:(id, body) => request('PATCH', `/sessions/${id}/status`, body),
+  deleteSession:      (id)       => request('DELETE', `/sessions/${id}`),
 
   // Feedback
   submitFeedback:    (body) => request('POST', '/feedback', body),
   getMentorFeedback: (id)   => request('GET',  `/feedback/mentor/${id}`),
-  getAllFeedback:    ()      => request('GET',  '/feedback'),
+  getAllFeedback:    ()     => request('GET',  '/feedback'),
+  deleteFeedback:    (id)   => request('DELETE', `/feedback/${id}`),
+
+  // Notifications
+  getNotifications:       ()   => request('GET', '/notifications'),
+  markNotificationRead:   (id) => request('PATCH', `/notifications/${id}/read`),
 };

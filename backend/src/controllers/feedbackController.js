@@ -4,6 +4,7 @@
 const Feedback = require('../models/Feedback');
 const Session = require('../models/Session');
 const { sendSuccess, sendError } = require('../utils/helpers');
+const db = require('../config/db');
 
 const submitFeedback = async (req, res, next) => {
   try {
@@ -30,6 +31,13 @@ const submitFeedback = async (req, res, next) => {
       rating:     parseInt(rating),
       review,
     });
+
+    // Notify the mentor about the feedback
+    await db.query(
+      'INSERT INTO notifications (user_id, message) VALUES ($1, $2)',
+      [session.mentor_id, `You received a new ${rating}-star review for session "${session.title}"`]
+    );
+
     sendSuccess(res, feedback, 'Feedback submitted', 201);
   } catch (err) { next(err); }
 };
@@ -50,4 +58,13 @@ const getAllFeedback = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-module.exports = { submitFeedback, getMentorFeedback, getAllFeedback };
+/** DELETE /api/feedback/:id — Delete feedback (admin) */
+const deleteFeedback = async (req, res, next) => {
+  try {
+    const success = await Feedback.delete(parseInt(req.params.id));
+    if (!success) return sendError(res, 'Feedback not found', 404);
+    sendSuccess(res, null, 'Feedback deleted successfully');
+  } catch (err) { next(err); }
+};
+
+module.exports = { submitFeedback, getMentorFeedback, getAllFeedback, deleteFeedback };

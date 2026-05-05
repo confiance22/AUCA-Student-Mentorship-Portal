@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const MentorProfile = require('../models/MentorProfile');
 const { generateToken, sendSuccess, sendError } = require('../utils/helpers');
+const db = require('../config/db');
 
 /**
  * POST /api/auth/register
@@ -40,6 +41,16 @@ const register = async (req, res, next) => {
     }
 
     const token = generateToken(user.id, user.role);
+
+    // Notify all admins about the new registration
+    const { rows: admins } = await db.query("SELECT id FROM users WHERE role = 'admin'");
+    if (admins.length > 0) {
+      const message = `New user registered: ${name} (${role})`;
+      for (const admin of admins) {
+        await db.query('INSERT INTO notifications (user_id, message) VALUES ($1, $2)', [admin.id, message]);
+      }
+    }
+
     sendSuccess(res, { user, token }, 'Registration successful', 201);
   } catch (err) {
     next(err);

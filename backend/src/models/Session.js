@@ -66,6 +66,12 @@ const Session = {
     const { rows } = await db.query('SELECT * FROM sessions WHERE id = $1', [id]);
     return rows[0];
   },
+
+  /** Delete a session (admin) */
+  delete: async (id) => {
+    const { rowCount } = await db.query('DELETE FROM sessions WHERE id = $1', [id]);
+    return rowCount > 0;
+  },
 };
 
 module.exports = Session;

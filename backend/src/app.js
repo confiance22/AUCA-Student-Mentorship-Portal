@@ -9,6 +9,7 @@ const authRoutes     = require('./routes/authRoutes');
 const userRoutes     = require('./routes/userRoutes');
 const sessionRoutes  = require('./routes/sessionRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use('/api/auth',     authRoutes);
 app.use('/api/users',    userRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health check
 app.get('/health', (_, res) => res.json({ status: 'ok', project: 'AUCA Mentorship Portal' }));

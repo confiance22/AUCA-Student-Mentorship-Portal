@@ -4,6 +4,7 @@
 const User = require('../models/User');
 const MentorProfile = require('../models/MentorProfile');
 const { sendSuccess, sendError } = require('../utils/helpers');
+const db = require('../config/db');
 
 /** GET /api/users/mentors — Approved mentors list */
 const getMentors = async (req, res, next) => {
@@ -34,6 +35,13 @@ const approveMentor = async (req, res, next) => {
       req.user.id
     );
     if (!profile) return sendError(res, 'Mentor not found', 404);
+
+    // Notify the mentor
+    await db.query(
+      'INSERT INTO notifications (user_id, message) VALUES ($1, $2)',
+      [profile.user_id, `Your mentor application has been ${status}`]
+    );
+
     sendSuccess(res, profile, `Mentor ${status}`);
   } catch (err) { next(err); }
 };
@@ -55,4 +63,13 @@ const updateProfile = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-module.exports = { getMentors, getPendingMentors, approveMentor, getAllUsers, updateProfile };
+/** DELETE /api/users/:id — Delete user (admin) */
+const deleteUser = async (req, res, next) => {
+  try {
+    const success = await User.delete(parseInt(req.params.id));
+    if (!success) return sendError(res, 'User not found', 404);
+    sendSuccess(res, null, 'User deleted successfully');
+  } catch (err) { next(err); }
+};
+
+module.exports = { getMentors, getPendingMentors, approveMentor, getAllUsers, updateProfile, deleteUser };

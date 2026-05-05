@@ -46,6 +46,12 @@ const User = {
     );
     return rows;
   },
+
+  /** Delete a user (admin) */
+  delete: async (id) => {
+    const { rowCount } = await db.query('DELETE FROM users WHERE id = $1', [id]);
+    return rowCount > 0;
+  },
 };
 
 module.exports = User;
