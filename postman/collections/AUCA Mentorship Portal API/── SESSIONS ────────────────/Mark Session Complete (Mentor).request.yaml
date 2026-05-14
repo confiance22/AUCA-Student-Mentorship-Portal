@@ -1,0 +1,14 @@
+$kind: http-request
+url: http://localhost:5000/api/sessions/1/status
+method: PATCH
+headers:
+  Authorization: Bearer
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6Im1lbnRvciIsImlhdCI6MTc3ODc0NTc0NCwiZXhwIjoxNzc5MzUwNTQ0fQ.hwbi9F6IIwgC1ysT-ZKwpKcIVwwc2RN0mTtuIpR4KFc
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "status": "completed"
+    }
+order: 6000

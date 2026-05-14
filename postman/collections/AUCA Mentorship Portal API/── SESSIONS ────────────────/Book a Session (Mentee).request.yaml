@@ -1,0 +1,18 @@
+$kind: http-request
+url: http://localhost:5000/api/sessions
+method: POST
+headers:
+  Authorization: Bearer
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6Im1lbnRlZSIsImlhdCI6MTc3ODc0NTcyNCwiZXhwIjoxNzc5MzUwNTI0fQ.una8MbXIDV3WuQCePrNJvBUJpG1btUjV3lM0A8h006A
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "mentor_id": 5,
+      "title": "Python Basics Session",
+      "description": "Introduction to Python programming",
+      "scheduled_at": "2026-06-01T14:00:00",
+      "duration_minutes": 60
+    }
+order: 1000

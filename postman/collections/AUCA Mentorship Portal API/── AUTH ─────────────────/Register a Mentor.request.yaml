@@ -1,0 +1,19 @@
+$kind: http-request
+url: http://localhost:5000/api/auth/register
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "New Mentor",
+      "email": "newmentor@test.com",
+      "password": "password123",
+      "role": "mentor",
+      "expertise": ["Python", "React"],
+      "department": "Computer Science",
+      "year_of_study": "Year 4",
+      "availability": "Mon-Fri 2pm-5pm"
+    }
+order: 5000

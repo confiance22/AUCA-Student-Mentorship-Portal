@@ -1,0 +1,14 @@
+$kind: http-request
+url: http://localhost:5000/api/users/5/approve
+method: PATCH
+headers:
+  Authorization: Bearer
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc4NzQ1NzAyLCJleHAiOjE3NzkzNTA1MDJ9.UeqNx6Kq1ImSG8MvUo5u296RhE9nZEX61B_nVkoiemY
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "status": "approved"
+    }
+order: 4000

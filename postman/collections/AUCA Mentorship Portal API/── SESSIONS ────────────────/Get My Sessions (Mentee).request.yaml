@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:5000/api/sessions
+method: GET
+headers:
+  Authorization: Bearer
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6Im1lbnRlZSIsImlhdCI6MTc3ODc0NTcyNCwiZXhwIjoxNzc5MzUwNTI0fQ.una8MbXIDV3WuQCePrNJvBUJpG1btUjV3lM0A8h006A
+order: 3000

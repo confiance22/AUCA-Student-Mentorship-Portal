@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:5000/api/users/pending
+method: GET
+headers:
+  Authorization: Bearer
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc4NzQ1NzAyLCJleHAiOjE3NzkzNTA1MDJ9.UeqNx6Kq1ImSG8MvUo5u296RhE9nZEX61B_nVkoiemY
+order: 2000
